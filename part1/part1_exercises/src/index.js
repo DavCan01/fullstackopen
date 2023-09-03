@@ -1,68 +1,70 @@
-import React from 'react'
+// {} significa que importamos una funcion
+
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Header = (props) => {
-  return (
-    <>
-      <h1>{props.course.name}</h1>
-    </>
-  )
-}
-
-const Content = (props) => {
-  return (
-    <>
-      <Part part={props.parts[0].name} exercises = {props.parts[0].exercises} />
-      <Part part={props.parts[1].name} exercises = {props.parts[1].exercises} />
-      <Part part={props.parts[2].name} exercises = {props.parts[2].exercises} />
-    </>
-  )
-}
-
-const Part = (props) => {
-  return (
-  <p>
-    {props.part} {props.exercises}
-  </p>
-
-  )
-}
-
-const Total = (props) => {
-  return (
-    <>
-        <p> Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises} </p>
-    </>
-  )
-}
-
-const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
   }
 
   return (
-
     <div>
-      <Header course={course} />
-      <Content parts={course.parts } />
-      <Total parts={course.parts } />
+      button press history: {props.allClicks.join(' ')}
     </div>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>
+    {text}
+  </button>
+)
+
+const App = () => {
+  const [left, setLeft] = useState(0)
+  const [right, setRight] = useState(0)
+  const [allClicks, setAll] = useState([]) // * Creamos una matriz vacia
+  // ! CUIDADO - Se debe hacer con "concat()" no con "push()" ya que internamente concat devuelve un nuevo array
+  // ! con el elemento añadido, mientras que push devuelve el mismo. No podemos modificar el elemento original como hemos
+  // ! mencionado anteriormente
+
+  /* 
+  * Como hacer un setter 
+  ? Despues, indicamos el valor que sea y punto
+  ? RECUERDA - Solo se puede cambiar el valor del estado de la variable con su funcion asociada
+ 
+  const setToValue = (newValue) => () => {
+    setValue(newValue)
+  } */
+
+  const handleLeftClick = () => {
+    setAll(allClicks.concat('L'))
+    setLeft(left + 1)
+  }
+
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setRight(right + 1)
+  }
+
+  return (
+    <div>
+      {left}
+      <Button onClick={handleLeftClick} text='left' />
+      <Button onClick={handleRightClick} text='right' />
+      {right}
+      <History allClicks={allClicks} />
+    </div>
+  )
+}
+
+ReactDOM.render(
+  <App />, 
+  document.getElementById('root')
+)
+
