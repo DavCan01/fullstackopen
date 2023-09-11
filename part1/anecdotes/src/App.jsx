@@ -8,6 +8,7 @@ const Button = ({ onClick, text }) => (
 
 const App = () => {
   const [selected, setSelected] = useState(0)
+  const [points,setPoints] = useState(Array(8).fill(0))
 
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -20,10 +21,19 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
 
+  // ! REMEMBER - Treat arrays and objects as read-only. That means that we have to make a new array to assign the new values. 
+  const vote = () => {
+    const copy = [...points]
+    copy[selected] += 1
+    setPoints(copy)
+  }
+   
 
   return (
     <div>
       <p>{anecdotes[selected]}<br></br></p>
+      <p>This anectode has {points[selected]} points </p>
+      <Button onClick={() => vote()} text = "Vote"/>
       <Button onClick={() => setSelected(Math.floor(Math.random() * (anecdotes.length - 1)))} text = "Next anecdote"/>
     </div>
   )
