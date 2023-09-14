@@ -9,10 +9,7 @@ const Header = ({name}) => {
 }
 const Total = ({exercises}) => { 
 
-  let total = 0;
-  for (let i = 0; i < exercises.length; i++) {
-    total += exercises[i].exercises;
-  }
+  const total = exercises.map(element => element.exercises).reduce((acc,curr) => acc + curr);
 
   return (
     <div>
